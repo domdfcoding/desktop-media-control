@@ -55,3 +55,11 @@ reformat = true
 [tool.snippet-fmt.languages.ini]
 
 [tool.snippet-fmt.languages.json]
+
+[tool.dep_checker]
+allowed_unused = [
+    "winrt_windows_media",
+    "winrt_windows_media_core",
+    "winrt_windows_media_playback",
+    "winrt_windows_ui_notifications",
+]

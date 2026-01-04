@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 #
-#  __init__.py
+#  player.py
 """
-Desktop media control integration.
+Protocol interface for media players.
 """
 #
-#  Adapted from https://github.com/ZachVFXX/PyMusicTerm
-#  Copyright (c) 2025 ZachVFX
+#  Copyright © 2025 Dominic Davis-Foster <dominic@davis-foster.co.uk>
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -28,15 +27,45 @@ Desktop media control integration.
 #
 
 # stdlib
-import sys
+from typing import Protocol, TypedDict
 
-__all__ = ["MediaControl", "SIGRAISE"]
+__all__ = ["Player", "TrackMetadata"]
 
-if sys.platform == "win32":
-	# this package
-	from .smtc import SIGRAISE
-	from .smtc import MediaControlWin32 as MediaControl
-else:
-	# this package
-	from .mpris import SIGRAISE
-	from .mpris import MediaControlMpris as MediaControl
+
+class TrackMetadata(TypedDict):
+	"""
+	The return type of :meth:`~.get_track_metadata`.
+	"""
+
+	title: str
+	artist: str
+	album: str
+	album_art: str
+	track_id: int
+
+
+class Player(Protocol):
+	"""
+	Protocol interface for media players.
+	"""
+
+	@property
+	def playing(self) -> bool: ...
+
+	@property
+	def position(self) -> float: ...
+
+	@property
+	def song_length(self) -> float: ...
+
+	def next(self) -> None: ...
+
+	def previous(self) -> None: ...
+
+	def pause_song(self) -> None: ...
+
+	def resume_song(self) -> None: ...
+
+	def stop(self) -> None: ...
+
+	def get_track_metadata(self) -> TrackMetadata: ...
